@@ -1,0 +1,15 @@
+box: wercker-labs/docker
+build:
+  steps:
+    - script:
+      name: show docker version
+      code: |
+        sudo docker version
+    - script:
+      name: build docker
+      code: |
+        sudo docker build -t 127.0.0.1:49000/lciel/base .
+    - script:
+      name: list images
+      code: |
+        sudo docker images
