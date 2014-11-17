@@ -6,8 +6,8 @@ build:
         code: |
           ls $WERCKER_CACHE_DIR
           echo $WERCKER_CACHE_DIR
-          if [ -e $WERCKER_CACHE_DIR/base.tar ]; then sudo docker load < $WERCKER_CACHE_DIR/base.tar; fi
-          if [ -e $WERCKER_CACHE_DIR/webapp.tar ]; then sudo docker load < $WERCKER_CACHE_DIR/webapp.tar; fi
+          if [ -e $WERCKER_CACHE_DIR/base.tar.gz ]; then gzip -dc $WERCKER_CACHE_DIR/base.tar.gz | sudo docker load; fi
+          if [ -e $WERCKER_CACHE_DIR/webapp.tar.gz ]; then gzip -dc $WERCKER_CACHE_DIR/webapp.tar.gz | sudo docker load; fi
     - script:
         name: Build base image
         code: |
@@ -23,8 +23,8 @@ build:
     - script:
         name: Save image caches
         code: |
-          sudo docker save 127.0.0.1:49000/lciel/base > $WERCKER_CACHE_DIR/base.tar
-          sudo docker save 127.0.0.1:49000/lciel/webapp > $WERCKER_CACHE_DIR/webapp.tar
+          sudo docker save 127.0.0.1:49000/lciel/base | gzip -c > $WERCKER_CACHE_DIR/base.tar.gz
+          sudo docker save 127.0.0.1:49000/lciel/webapp | gzip -c > $WERCKER_CACHE_DIR/webapp.tar.gz
           ls -lh $WERCKER_CACHE_DIR
     - script:
         name: Run rspec
