@@ -2,6 +2,11 @@ box: wercker-labs/docker
 build:
   steps:
     - script:
+        name: Restore image caches
+        code: |
+          if [ -e $WERCKER_CACHE_DIR/base.tar ]; then sudo docker load < $WERCKER_CACHE_DIR/base.tar; fi
+          if [ -e $WERCKER_CACHE_DIR/webapp.tar ]; then sudo docker load < $WERCKER_CACHE_DIR/webapp.tar; fi
+    - script:
         name: Build base image
         code: |
           sudo docker build -t 127.0.0.1:49000/lciel/base ./base
@@ -13,6 +18,11 @@ build:
         name: List images
         code: |
           sudo docker images
+    - script:
+        name: Store image caches
+        code: |
+          sudo docker save 127.0.0.1:49000/lciel/base > $WERCKER_CACHE_DIR/base.tar
+          sudo docker save 127.0.0.1:49000/lciel/webapp > $WERCKER_CACHE_DIR/webapp.tar
     - script:
         name: Run rspec
         code: |
