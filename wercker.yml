@@ -5,7 +5,7 @@ build:
         name: Load image caches
         code: |
           ls $WERCKER_CACHE_DIR
-          if [ -e $WERCKER_CACHE_DIR/base.tar ]; then echo "exist!!"; fi
+          echo $WERCKER_CACHE_DIR
           if [ -e $WERCKER_CACHE_DIR/base.tar ]; then sudo docker load < $WERCKER_CACHE_DIR/base.tar; fi
           if [ -e $WERCKER_CACHE_DIR/webapp.tar ]; then sudo docker load < $WERCKER_CACHE_DIR/webapp.tar; fi
     - script:
