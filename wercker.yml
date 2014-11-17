@@ -2,14 +2,14 @@ box: wercker-labs/docker
 build:
   steps:
     - script:
-        name: list images (before)
+        name: Build base image
         code: |
-          sudo docker images
+          sudo docker build -t 127.0.0.1:49000/lciel/base ./base
     - script:
-        name: build docker
+        name: Build webapp image
         code: |
-          sudo docker build -t 127.0.0.1:49000/lciel/base .
+          sudo docker build -t 127.0.0.1:49000/lciel/webapp ./webapp
     - script:
-        name: list images (after)
+        name: List images
         code: |
           sudo docker images

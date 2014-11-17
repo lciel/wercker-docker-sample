@@ -26,9 +26,7 @@ apt-get install -y -q \
     automake \
     make \
     sqlite3 \
-    libsqlite3-dev \
-    libmysqld-dev \
-    libmagickwand-dev
+    libsqlite3-dev
 
 # Install ruby
 curl -O http://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz
