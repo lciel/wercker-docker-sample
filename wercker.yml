@@ -13,3 +13,7 @@ build:
         name: List images
         code: |
           sudo docker images
+    - script:
+        name: Run rspec
+        code: |
+          sudo docker run --rm -e RAILS_ENV=test 127.0.0.1:49000/lciel/webapp:latest bash -c "cd /app && bundle exec rspec"
