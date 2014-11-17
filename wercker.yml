@@ -25,6 +25,7 @@ build:
         code: |
           sudo docker save 127.0.0.1:49000/lciel/base > $WERCKER_CACHE_DIR/base.tar
           sudo docker save 127.0.0.1:49000/lciel/webapp > $WERCKER_CACHE_DIR/webapp.tar
+          ls -lh $WERCKER_CACHE_DIR
     - script:
         name: Run rspec
         code: |
