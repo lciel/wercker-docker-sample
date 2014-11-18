@@ -1,10 +1,34 @@
 box: wercker-labs/docker
 build:
-    steps:
-        - script:
-            name: test
-            code: |
-              hostname
-              ls -R /cache
-              touch /cache/file
-              ls -R /cache
+  steps:
+    - script:
+        name: Load image caches
+        code: |
+          hostname
+          df -h
+          ls -R $WERCKER_CACHE_DIR
+          echo $WERCKER_CACHE_DIR
+          if [ -e $WERCKER_CACHE_DIR/images/base.tar.gz ]; then gzip -dc $WERCKER_CACHE_DIR/base.tar.gz | sudo docker load; fi
+          if [ -e $WERCKER_CACHE_DIR/webapp.tar.gz ]; then gzip -dc $WERCKER_CACHE_DIR/webapp.tar.gz | sudo docker load; fi
+    - script:
+        name: Build base image
+        code: |
+          sudo docker build -t 127.0.0.1:49000/lciel/base ./base
+    - script:
+        name: Build webapp image
+        code: |
+          sudo docker build -t 127.0.0.1:49000/lciel/webapp ./webapp
+    - script:
+        name: List images
+        code: |
+          sudo docker images
+    - script:
+        name: Save image caches
+        code: |
+          sudo docker save 127.0.0.1:49000/lciel/base | gzip -c > $WERCKER_CACHE_DIR/base.tar.gz
+          sudo docker save 127.0.0.1:49000/lciel/webapp | gzip -c > $WERCKER_CACHE_DIR/webapp.tar.gz
+          ls -lh $WERCKER_CACHE_DIR
+    - script:
+        name: Run rspec
+        code: |
+          sudo docker run --rm -e RAILS_ENV=test 127.0.0.1:49000/lciel/webapp:latest bash -c "cd /app && bundle exec rspec"
