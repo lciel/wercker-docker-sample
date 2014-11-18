@@ -1,20 +1,9 @@
 box: wercker-labs/docker
+box-type: ami
 build:
-  steps:
-    - script:
-        name: List images
-        code: |
-          sudo docker images
-    - script:
-        name: Load cache test
-        code: |
-          ls -R $WERCKER_CACHE_DIR
-          if [ -e $WERCKER_CACHE_DIR/images/test.txt ]; then cat $WERCKER_CACHE_DIR/test.txt; fi
-    - script:
-        name: Save cache test
-        code: |
-          if [ ! -e $WERCKER_CACHE_DIR/images ]; then mkdir -p $WERCKER_CACHE_DIR/images; fi
-          date > $WERCKER_CACHE_DIR/images/test.txt
-          ls -R $WERCKER_CACHE_DIR
-          cat $WERCKER_CACHE_DIR/images/test.txt
-          du -sh $WERCKER_CACHE_DIR
+    steps:
+        - script:
+            name: test
+            code: |
+              ls /cache
+              touch /cache/file
