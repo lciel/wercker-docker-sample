@@ -5,6 +5,7 @@ build:
         name: Load image caches
         code: |
           hostname
+          df -h
           ls -R $WERCKER_CACHE_DIR
           echo $WERCKER_CACHE_DIR
           if [ -e $WERCKER_CACHE_DIR/images/base.tar.gz ]; then gzip -dc $WERCKER_CACHE_DIR/base.tar.gz | sudo docker load; fi
