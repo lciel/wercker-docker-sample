@@ -8,7 +8,7 @@ build:
     - script:
         name: Load cache test
         code: |
-          ls $WERCKER_CACHE_DIR
+          ls -R $WERCKER_CACHE_DIR
           if [ -e $WERCKER_CACHE_DIR/images/test.txt ]; then cat $WERCKER_CACHE_DIR/test.txt; fi
     - script:
         name: Save cache test
