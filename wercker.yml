@@ -4,6 +4,7 @@ build:
         - script:
             name: test
             code: |
+              hostname
               ls /cache
               touch /cache/file
               ls /cache
