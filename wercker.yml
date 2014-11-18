@@ -7,3 +7,4 @@ build:
             code: |
               ls /cache
               touch /cache/file
+              ls /cache
