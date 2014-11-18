@@ -1,5 +1,4 @@
-box: wercker-labs/docker
-box-type: ami
+box: wercker/ruby
 build:
     steps:
         - script:
