@@ -5,7 +5,6 @@ build:
             name: test
             code: |
               hostname
-              ls /cache
-              cat /cache/*
+              ls -R /cache
               touch /cache/file
-              ls /cache
+              ls -R /cache
