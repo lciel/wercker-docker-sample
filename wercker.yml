@@ -2,11 +2,6 @@ box: wercker-labs/docker
 build:
   steps:
     - script:
-        name: Environment check
-        code: |
-            which python
-            which ruby
-    - script:
         name: Load image caches
         code: |
           hostname
@@ -47,10 +42,10 @@ deploy:
     - script:
         name: Install Beanstalk CLI
         code: |
-          wget --quiet https://s3.amazonaws.com/elasticbeanstalk/cli/AWS-ElasticBeanstalk-CLI-2.4.0.zip
-          unzip -qq AWS-ElasticBeanstalk-CLI-2.4.0.zip
+          wget --quiet https://s3.amazonaws.com/elasticbeanstalk/cli/AWS-ElasticBeanstalk-CLI-2.6.4.zip
+          unzip -qq AWS-ElasticBeanstalk-CLI-2.6.4.zip
           sudo mkdir -p /usr/local/aws/elasticbeanstalk
-          sudo mv AWS-ElasticBeanstalk-CLI-2.4.0/* /usr/local/aws/elasticbeanstalk/
+          sudo mv AWS-ElasticBeanstalk-CLI-2.6.4/* /usr/local/aws/elasticbeanstalk/
           export PATH="/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH"
           export AWS_CREDENTIAL_FILE="${HOME}/.elasticbeanstalk/aws_credential_file"
           mkdir -p "${HOME}/.elasticbeanstalk/"
