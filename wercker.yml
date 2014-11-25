@@ -32,3 +32,61 @@ build:
         name: Run rspec
         code: |
           sudo docker run --rm -e RAILS_ENV=test 127.0.0.1:49000/lciel/webapp:latest bash -c "cd /app && bundle exec rspec"
+
+deploy:
+  steps:
+
+    - script:
+        name: Install Beanstalk CLI
+        code: |
+          wget --quiet https://s3.amazonaws.com/elasticbeanstalk/cli/AWS-ElasticBeanstalk-CLI-2.4.0.zip
+          unzip -qq AWS-ElasticBeanstalk-CLI-2.4.0.zip
+          sudo mkdir -p /usr/local/aws/elasticbeanstalk
+          sudo mv AWS-ElasticBeanstalk-CLI-2.4.0/* /usr/local/aws/elasticbeanstalk/
+          export PATH="/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH"
+          export AWS_CREDENTIAL_FILE="${HOME}/.elasticbeanstalk/aws_credential_file"
+          mkdir -p "${HOME}/.elasticbeanstalk/"
+          mkdir -p "${WERCKER_SOURCE_DIR}/.elasticbeanstalk/"
+
+    - create-file:
+        name: Create AWS credentials
+        filename: $AWS_CREDENTIAL_FILE
+        content: |
+          AWSAccessKeyId=$KEY
+          AWSSecretKey=$SECRET_KEY
+
+    - create-file:
+        name: Create EB config
+        filename: $WERCKER_SOURCE_DIR/.elasticbeanstalk/config
+        content: |
+          [global]
+          ApplicationName=wercker-docker-sample
+          DevToolsEndpoint=git.elasticbeanstalk.ap-northeast-1.amazonaws.com
+          EnvironmentName=sandbox
+          Region=ap-northeast-1
+          ServiceEndpoint=https://elasticbeanstalk.ap-northeast-1.amazonaws.com
+          AwsCredentialFile=$AWS_CREDENTIAL_FILE/.elasticbeanstalk/aws_credential_file
+
+    - script:
+        name: EB status
+        code: eb status
+
+    - script:
+        name: Create deploy repository
+        code: |
+          git config --global user.email "lcently@gmail.com"
+          git config --global user.name "wercker"
+
+          rm -rf $WERCKER_SOURCE_DIR/.git
+          echo ".elasticbeanstalk/" > .gitignore
+          git init
+          git add .
+          git commit -m "deploy commit"
+          sudo bash /usr/local/aws/elasticbeanstalk/AWSDevTools/Linux/AWSDevTools-RepositorySetup.sh
+
+    - script:
+        name: Push to AWS
+        code: |
+          git checkout master
+          git aws.push
+

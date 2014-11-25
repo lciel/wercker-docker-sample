@@ -16,3 +16,4 @@
 /webapp/log/*.log
 /webapp/tmp
 /webapp/.rspec
+.elasticbeanstalk/
