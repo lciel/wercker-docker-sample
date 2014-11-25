@@ -36,6 +36,9 @@ build:
 deploy:
   steps:
 
+    - install-packages:
+        packages: unzip
+
     - script:
         name: Install Beanstalk CLI
         code: |
@@ -52,8 +55,8 @@ deploy:
         name: Create AWS credentials
         filename: $AWS_CREDENTIAL_FILE
         content: |
-          AWSAccessKeyId=$KEY
-          AWSSecretKey=$SECRET_KEY
+          AWSAccessKeyId=$AWS_ACCESS_KEY_ID
+          AWSSecretKey=$AWS_SECRET_KEY
 
     - create-file:
         name: Create EB config
@@ -62,7 +65,7 @@ deploy:
           [global]
           ApplicationName=wercker-docker-sample
           DevToolsEndpoint=git.elasticbeanstalk.ap-northeast-1.amazonaws.com
-          EnvironmentName=sandbox
+          EnvironmentName=$EB_ENVIRONMENT
           Region=ap-northeast-1
           ServiceEndpoint=https://elasticbeanstalk.ap-northeast-1.amazonaws.com
           AwsCredentialFile=$AWS_CREDENTIAL_FILE/.elasticbeanstalk/aws_credential_file
