@@ -2,6 +2,11 @@ box: wercker-labs/docker
 build:
   steps:
     - script:
+        name: Environment check
+        code: |
+            which python
+            which ruby
+    - script:
         name: Load image caches
         code: |
           hostname
